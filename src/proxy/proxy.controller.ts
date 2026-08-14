@@ -1,4 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
+import { ProxyService } from './proxy.service';
+import { ChatMessage } from './ai.provider.interface';
 
-@Controller('proxy')
-export class ProxyController {}
+@Controller('v1/chat')
+export class ProxyController {
+  constructor(private readonly proxyService: ProxyService) {}
+
+  @Post('completions')
+  async handleChat(@Body('messages') messages: ChatMessage[]) {
+    return await this.proxyService.askAi(messages);
+  }
+}
